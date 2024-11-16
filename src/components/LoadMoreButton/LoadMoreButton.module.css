@@ -1,0 +1,18 @@
+.LoadMoreButton {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.button {
+    border: none;
+    background: #3747ac;
+    width: 150px;
+    height: 48px;
+    border-radius: 8px;
+    color: #fff;
+}
+
+.button:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}

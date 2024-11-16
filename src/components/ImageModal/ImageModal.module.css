@@ -1,0 +1,11 @@
+.button {
+    right: 10px;
+    top: 10px;
+    position: absolute;
+    border: none;
+    background: inherit;
+}
+
+.button svg {
+    fill: #fff;
+}

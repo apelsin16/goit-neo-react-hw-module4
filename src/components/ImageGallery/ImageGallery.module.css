@@ -1,0 +1,11 @@
+.ImageGallery {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 10px;
+    align-items: center;
+}
+
+.item {
+    flex-basis: 24%;
+}

@@ -1,0 +1,26 @@
+.SearchBar {
+    background: #3747ac;
+    height: 50px;
+}
+
+.form {
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input {
+    padding-left: 30px;
+    outline: none;
+}
+
+.button {
+    position: absolute;
+    background: inherit;
+    border: none;
+    left: calc(50% - 115px);
+    display: flex;
+    align-items: center;
+}
