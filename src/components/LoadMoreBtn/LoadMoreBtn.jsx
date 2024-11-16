@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import css from './LoadMoreButton.module.css';
+import css from './LoadMoreBtn.module.css';
 
-const LoadMoreButton = ({ onSubmit }) => {
+const LoadMoreBtn = ({ onSubmit }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         onSubmit();
@@ -16,8 +16,8 @@ const LoadMoreButton = ({ onSubmit }) => {
     );
 };
 
-LoadMoreButton.propTypes = {
+LoadMoreBtn.propTypes = {
     onSubmit: PropTypes.func,
 };
 
-export default LoadMoreButton;
+export default LoadMoreBtn;

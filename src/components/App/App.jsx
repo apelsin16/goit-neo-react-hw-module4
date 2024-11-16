@@ -1,13 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { fetchImagesWithQuery } from '../../unsplash-api';
-
 import css from './App.module.css';
 import { Toaster } from 'react-hot-toast';
 import SearchBar from '../SearchBar/SearchBar';
 import ImageGallery from '../ImageGallery/ImageGallery';
 import Loader from '../Loader/Loader';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
-import LoadMoreButton from '../LoadMoreButton/LoadMoreButton';
+import LoadMoreButton from '../LoadMoreBtn/LoadMoreBtn';
 import ImageModal from '../ImageModal/ImageModal';
 
 function App() {
@@ -31,32 +30,21 @@ function App() {
         }
     }, [images]);
 
-    const closeModal = () => {
-        setModalIsOpen(false);
-        setImage('');
-    };
-
-    const handleSubmit = (searchString) => {
+    useEffect(() => {
+        if (!query) return;
         async function fetchImages() {
             try {
                 setLoading(true);
                 setError(false);
 
-                const isNewSearch = searchString && searchString !== query;
-                const nextPage = isNewSearch ? 1 : page + 1;
-                const currentQuery = isNewSearch ? searchString : query;
+                const data = await fetchImagesWithQuery(query, page);
 
-                const data = await fetchImagesWithQuery(currentQuery, nextPage);
-
-                if (isNewSearch) {
-                    setImages(data.results);
-                    setQuery(currentQuery);
-                    setPage(1);
-                    setTotalPages(data.total_pages);
-                } else {
-                    setImages((prevImages) => [...prevImages, ...data.results]);
-                    setPage(nextPage);
-                }
+                setImages((prevImages) => {
+                    return page === 1
+                        ? data.results
+                        : [...prevImages, ...data.results];
+                });
+                setTotalPages(data.total_pages);
             } catch (err) {
                 setError(true);
                 console.error('Помилка при отриманні зображень:', err);
@@ -65,23 +53,40 @@ function App() {
             }
         }
         fetchImages();
+    }, [query, page]);
+
+    const closeModal = () => {
+        setModalIsOpen(false);
+        setImage('');
+    };
+
+    const handleSubmit = (searchString) => {
+        setQuery(searchString);
+        setPage(1);
+    };
+
+    const loadMoreImages = () => {
+        setPage((prevPage) => prevPage + 1);
     };
 
     return (
         <div className={css.App}>
             <SearchBar onSubmit={handleSubmit} />
-            {!loading && images.length > 0 && !error && (
-                <ImageGallery
-                    images={images}
-                    lastImageRef={lastImageRef}
-                    onSetImage={setImage}
-                    onSetModalIsOpen={setModalIsOpen}
-                />
-            )}
+            {!loading &&
+                Array.isArray(images) &&
+                images.length > 0 &&
+                !error && (
+                    <ImageGallery
+                        images={images}
+                        lastImageRef={lastImageRef}
+                        onSetImage={setImage}
+                        onSetModalIsOpen={setModalIsOpen}
+                    />
+                )}
             {loading && <Loader />}
             {error && <ErrorMessage />}
             {images.length > 0 && totalPages > page && (
-                <LoadMoreButton onSubmit={handleSubmit} />
+                <LoadMoreButton onSubmit={loadMoreImages} />
             )}
             <Toaster />
             <ImageModal
